@@ -1,3 +1,5 @@
+require("dotenv").config();
+
 exports.parseCity = async (cityOrPincode) => {
     let city = "";
     if (!isNaN(parseInt(cityOrPincode))) {
