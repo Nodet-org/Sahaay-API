@@ -1,35 +1,23 @@
 const express = require("express");
 const cors = require("cors");
 const path = require("path");
-const twitter  = require("static-tweets");
+const twitter = require("static-tweets");
 const db = require("./utils/firebase").db;
 const helpers = require("./utils/helpers");
 
 var app = express();
 
 app.use(cors());
+app.use(express.json());
 
 app.get("/", (req, res) => {
   res.send("Everything started with a blast.");
 });
 
-app.get("/api/tweets", async (req, res) => {
-  const tweetsId = req.body.tweets;
-  const tweetsJSON = [];
-  for (let i = 0; i < tweetsId.length; i++) {
-    const tweetJSON = await twitter.fetchTweetAst(tweetsId[i]);
-    tweetsJSON.push(tweetJSON);
-  }
-  return res.status(200).json({
-    tweets: tweetsJSON,
-  });
-});
-
-
-app.get("/api/scrap", async (req, res) => {
+app.post("/api/scrape", async (req, res) => {
   console.log(req.body);
   if (!req.body.cityOrPincode || !req.body.resource)
-    return res.status(400).send({error: "Enter a city to search for"});
+    return res.status(400).send({ error: "Enter a city to search for" });
   const { twitterAPIParams, link, city } = await helpers.generateLink(req.body);
   const dbref = db.ref(`tweets/${city}/${req.body.resource}`);
   const { tweets, sinceId } = await helpers.getTweets(
