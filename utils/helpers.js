@@ -65,20 +65,20 @@ exports.getTweets = async (parameter, city, resource) => {
   const data = await db.ref(`tweets/${city}/${resource}`).once("value");
   try {
     const twitterUrl = `${url}?${
-      data.val().sinceId ? `since_id=${data.val().sinceId}&` : ""
+      data.val()?.sinceId ? `since_id=${data.val().sinceId}&` : ""
     }query=${parameter}`;
     let response;
     if (
       data.val() === null ||
       new Date(
-        new Date(data.val().lastUpdated).setMinutes(
-          new Date(data.val().lastUpdated).getMinutes() + 5
+        new Date(data.val()?.lastUpdated).setMinutes(
+          new Date(data.val()?.lastUpdated).getMinutes() + 5
         )
       ).getTime() -
         new Date().getTime() <
         0
     ) {
-      console.log("Fetching, data is old...", data.val().lastUpdated);
+      console.log("Fetching, data is old...", data.val()?.lastUpdated);
       response = await axios.get(twitterUrl, {
         headers: {
           Authorization: `Bearer ${process.env.TWITTER_BEARER_TOKEN}`,
