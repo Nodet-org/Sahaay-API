@@ -6,11 +6,11 @@ const parseCity = async (cityOrPincode) => {
   let city = "";
   if (!isNaN(parseInt(cityOrPincode))) {
     try {
-      const response = await (
-        await fetch("https://api.postalpincode.in/pincode/" + cityOrPincode)
-      ).json();
-      if (response[0].Status && response[0].PostOffice.length) {
-        city = response[0].PostOffice[0].Region;
+      const response = await axios(
+        "https://api.postalpincode.in/pincode/" + cityOrPincode
+      );
+      if (response.data[0].Status && response.data[0].PostOffice.length) {
+        city = response.data[0].PostOffice[0].Region;
       } else {
         return { inValid: "pincode" };
       }
@@ -52,7 +52,7 @@ exports.generateLink = async ({ cityOrPincode, verified, resource }) => {
   const url = "https://twitter.com/search?q=";
   let search = verified ? "verified" : "";
   let city = await parseCity(cityOrPincode);
-  if (city.inValid) return city;
+  if (city?.inValid) return city;
   let parameters = parseSearchParameters(resource);
   let twitterAPIParams = `${search} ${city} ${resource} -"any" -"requirement" -"requirements" -"requires" -"require" -"required" -"request" -"requests" -"requesting" -"needed" -"needs" -"need" -"seeking" -"seek" -"not verified" -"notverified" -"looking" -"unverified" -"urgent" -"urgently" -"urgently required" -"sending" -"send" -"help" -"dm" -"get" -"year" -"old" -"male" -"female" -"saturation" -is:reply -is:retweet -is:quote&max_results=20&tweet.fields=created_at,public_metrics&expansions=author_id`;
   search += `+${city}+${parameters}&f=live`;
