@@ -8,7 +8,7 @@
 
 <br />
 
-## Server
+## API
 
 * [Repo](https://github.com/Nodet-org/Sahaay-API/)
 
