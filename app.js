@@ -1,17 +1,18 @@
 const express = require("express");
 const cors = require("cors");
 const path = require("path");
-const twitter = require("static-tweets");
 const db = require("./utils/firebase").db;
 const helpers = require("./utils/helpers");
 
-var app = express();
+const PORT = process.env.PORT || 5000;
+
+const app = express();
 
 app.use(cors());
 app.use(express.json());
 
 app.get("/", (req, res) => {
-  res.send("Everything started with a blast.");
+  res.status(200).send({ message: "Everything started with a blast." });
 });
 
 app.post("/api/scrape", async (req, res) => {
@@ -58,6 +59,6 @@ app.post("/api/scrape", async (req, res) => {
 
 app.use("/public/static", express.static(path.join(__dirname, "static")));
 
-app.listen(process.env.PORT || 5000, () => {
-  console.log("Server running on port 5000");
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
 });

@@ -96,6 +96,7 @@ exports.getTweets = async (parameter, city, resource) => {
     }
   } catch (err) {
     console.log(err, "ERROR");
+    return { tweets: [], sinceId: "" };
   }
 };
 
