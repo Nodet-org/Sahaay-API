@@ -17,11 +17,9 @@ app.get("/", (req, res) => {
 });
 
 app.post("/api/scrape", async (req, res) => {
-  console.log(req.body);
   if (!req.body.cityOrPincode || !req.body.resource)
     return res.status(400).send({ error: "Enter a city to search for" });
   const { twitterAPIParams, link, city } = await helpers.generateLink(req.body);
-  console.log(city);
   if (city?.inValid === "pincode")
     return res.status(400).send({
       message: "Invalid Pincode! Please enter a valid pincode/city",

@@ -55,7 +55,6 @@ exports.generateLink = async ({ cityOrPincode, verified, resource }) => {
   const url = "https://twitter.com/search?q=";
   let search = verified ? "verified" : "";
   let city = await parseCity(cityOrPincode);
-  console.log(city);
   if (city?.inValid === "pincode") return { city: { inValid: "pincode" } };
   let parameters = parseSearchParameters(resource);
   let twitterAPIParams = `${search} ${city} ${resource} -"any" -"requirement" -"requirements" -"requires" -"require" -"required" -"request" -"requests" -"requesting" -"needed" -"needs" -"need" -"seeking" -"seek" -"not verified" -"notverified" -"looking" -"unverified" -"urgent" -"urgently" -"urgently required" -"sending" -"send" -"help" -"dm" -"get" -"year" -"old" -"male" -"female" -"saturation" -is:reply -is:retweet -is:quote&max_results=20&tweet.fields=created_at,public_metrics&expansions=author_id`;
@@ -89,21 +88,15 @@ exports.getTweets = async (parameter, city, resource) => {
         },
       });
     }
-    console.log(response);
     if (response?.data?.meta?.result_count > 0) {
-      console.log("Fetching from api :(");
       const tweets = response.data.data.map((tweet) => tweet.id);
       return { tweets, sinceId: response.data.meta.newest_id };
     } else {
-      console.log("Fetching from db..");
       return { tweets: [], sinceId: "" };
     }
   } catch (err) {
-    console.log(err, "ERROR");
+    console.log("ERROR", err);
     return { tweets: [], sinceId: "" };
   }
 };
 
-exports.getRelativeTime = (time) => {
-  return moment(time).fromNow();
-};
