@@ -11,7 +11,7 @@ const parseCity = async (cityOrPincode) => {
       );
       if (
         response.data[0].Status === "Success" &&
-        response.data[0].PostOffice?.length
+        response.data[0].PostOffice
       ) {
         city = response.data[0].PostOffice[0].Region;
       } else {
@@ -55,7 +55,8 @@ exports.generateLink = async ({ cityOrPincode, verified, resource }) => {
   const url = "https://twitter.com/search?q=";
   let search = verified ? "verified" : "";
   let city = await parseCity(cityOrPincode);
-  if (city?.inValid) return city;
+  console.log(city);
+  if (city?.inValid === "pincode") return { city: { inValid: "pincode" } };
   let parameters = parseSearchParameters(resource);
   let twitterAPIParams = `${search} ${city} ${resource} -"any" -"requirement" -"requirements" -"requires" -"require" -"required" -"request" -"requests" -"requesting" -"needed" -"needs" -"need" -"seeking" -"seek" -"not verified" -"notverified" -"looking" -"unverified" -"urgent" -"urgently" -"urgently required" -"sending" -"send" -"help" -"dm" -"get" -"year" -"old" -"male" -"female" -"saturation" -is:reply -is:retweet -is:quote&max_results=20&tweet.fields=created_at,public_metrics&expansions=author_id`;
   search += `+${city}+${parameters}&f=live`;

@@ -21,6 +21,11 @@ app.post("/api/scrape", async (req, res) => {
   if (!req.body.cityOrPincode || !req.body.resource)
     return res.status(400).send({ error: "Enter a city to search for" });
   const { twitterAPIParams, link, city } = await helpers.generateLink(req.body);
+  console.log(city);
+  if (city?.inValid === "pincode")
+    return res.status(400).send({
+      message: "Invalid Pincode! Please enter a valid pincode/city",
+    });
   const dbref = db.ref(`tweets/${city}/${req.body.resource}`);
   const { tweets, sinceId } = await helpers.getTweets(
     twitterAPIParams,
