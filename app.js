@@ -12,7 +12,8 @@ app.use(cors());
 app.use(express.json());
 
 app.get("/", (req, res) => {
-  res.status(200).send({ message: "Everything started with a blast." });
+  // res.status(200).send({ message: "Everything started with a blast." });
+  res.render("index");
 });
 
 app.post("/api/scrape", async (req, res) => {
@@ -58,6 +59,9 @@ app.post("/api/scrape", async (req, res) => {
 });
 
 app.use("/public/static", express.static(path.join(__dirname, "static")));
+app.set("views", path.join(__dirname, "views"));
+app.set("view engine", "ejs");
+app.use("/utils", express.static(__dirname + "/utils"));
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
