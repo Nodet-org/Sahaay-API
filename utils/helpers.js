@@ -13,7 +13,7 @@ const parseCity = async (cityOrPincode) => {
         response.data[0].Status === "Success" &&
         response.data[0].PostOffice
       ) {
-        city = response.data[0].PostOffice[0].Region;
+        city = response.data[0].PostOffice[0].District;
       } else {
         return { inValid: "pincode" };
       }
