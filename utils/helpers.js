@@ -9,7 +9,10 @@ const parseCity = async (cityOrPincode) => {
       const response = await axios(
         "https://api.postalpincode.in/pincode/" + cityOrPincode
       );
-      if (response.data[0].Status && response.data[0].PostOffice.length) {
+      if (
+        response.data[0].Status === "Success" &&
+        response.data[0].PostOffice?.length
+      ) {
         city = response.data[0].PostOffice[0].Region;
       } else {
         return { inValid: "pincode" };
